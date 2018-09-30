@@ -20,6 +20,8 @@ class EWPhotoCollectionViewController: UIViewController {
         return view
     }()
 
+    public var delegate: EWImageCropperDelegate?
+
     private let manager =  EWPickerManager()
     private var photoArray = [UIImage]()
 
@@ -76,7 +78,9 @@ extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectio
         manager.getPhotoData(index: indexPath.row) { (data, infoDic) in
             guard data != nil else { return }
             let image = UIImage(data: data!)
-            self.navigationController?.pushViewController(EWPhotoCropViewController(image: image!), animated: true)
+            let VC = EWPhotoCropViewController(image: image!)
+            VC.delegate = self.delegate
+            self.navigationController?.pushViewController(VC, animated: true)
         }
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -91,5 +95,4 @@ extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectio
         return EWPickerManager.pickerPhotoSize
     }
 }
-
 

@@ -7,6 +7,10 @@
 //
 
 import UIKit
+
+@objc protocol EWImageCropperDelegate : NSObjectProtocol {
+    func imageCropper(_ cropperViewController:EWPhotoCropViewController, didFinished editImg:UIImage)
+}
 /// 选中图片后裁切控制器
 class EWPhotoCropViewController: UIViewController {
 
@@ -14,7 +18,10 @@ class EWPhotoCropViewController: UIViewController {
     private var largeFrame: CGRect?
     private var cropFrame: CGRect?
     private var latestFrame: CGRect?
+
     private var selectedPhoto: UIImage = UIImage()
+
+    var delegate: EWImageCropperDelegate?
 
     private let overlayView: UIView = {
         let view = UIImageView(frame: CGRect(x: 0, y: 0, width: ScreenInfo.Width, height: ScreenInfo.Height))
@@ -72,7 +79,8 @@ class EWPhotoCropViewController: UIViewController {
             self.backImageView.frame = CGRect(x: 0, y: (ScreenInfo.Height - photoOldHeight) / 2 , width: cropWidth, height: photoOldHeight)
         }
         oldFrame = self.backImageView.frame
-        largeFrame = CGRect(x: 0, y: 0, width: (oldFrame?.size.width)! * 3, height: (oldFrame?.size.width)! * 3)
+        self.latestFrame = self.oldFrame
+        largeFrame = CGRect(x: 0, y: 0, width: (oldFrame?.size.width)! * 3, height: (oldFrame?.size.height)! * 3)
         cropFrame = self.cropView.frame
     }
     private func drawBottomButtonView(){
@@ -147,25 +155,24 @@ class EWPhotoCropViewController: UIViewController {
     }
     //pan gesture handler
     @objc private func panView(_ panGestureRecognizer:UIPanGestureRecognizer) {
-//        let view = self.showImgView!
-//        if panGestureRecognizer.state == UIGestureRecognizerState.began || panGestureRecognizer.state == UIGestureRecognizerState.changed {
-//            let absCenterX = self.cropFrame!.origin.x + self.cropFrame!.size.width / 2
-//            let absCenterY = self.cropFrame!.origin.y + self.cropFrame!.size.height / 2
-//            let scaleRatio = self.showImgView!.frame.size.width / self.cropFrame!.size.width
-//            let acceleratorX = 1 - abs(absCenterX - view.center.x) / (scaleRatio * absCenterX)
-//            let acceleratorY = 1 - abs(absCenterY - view.center.y) / (scaleRatio * absCenterY)
-//            let translation = panGestureRecognizer.translation(in: view.superview)
-//            view.center = CGPoint(x: view.center.x + translation.x * acceleratorX, y: view.center.y + translation.y * acceleratorY)
-//            panGestureRecognizer.setTranslation(CGPoint.zero, in: view.superview)
-//        }
-//        else if panGestureRecognizer.state == UIGestureRecognizerState.ended {
-//            var newFrame = self.showImgView!.frame
-//            newFrame = self.handleBorderOverflow(newFrame)
-//            UIView.animate(withDuration: BOUNDCE_DURATION, animations: { () -> Void in
-//                self.showImgView!.frame = newFrame
-//                self.latestFrame = newFrame
-//            })
-//        }
+        let view = self.backImageView
+        if panGestureRecognizer.state == .began || panGestureRecognizer.state == .changed{
+            let absCenterX = self.cropFrame!.origin.x + self.cropFrame!.size.width / 2
+            let absCenterY = self.cropFrame!.origin.y + self.cropFrame!.size.height / 2
+            let scaleRatio = self.backImageView.frame.size.width / self.cropFrame!.size.width
+            let acceleratorX = 1 - abs(absCenterX - view.center.x) / (scaleRatio * absCenterX)
+            let acceleratorY = 1 - abs(absCenterY - view.center.y) / (scaleRatio * absCenterY)
+            let translation = panGestureRecognizer.translation(in: view.superview)
+            view.center = CGPoint(x:view.center.x + translation.x * acceleratorX, y: view.center.y + translation.y * acceleratorY)
+            panGestureRecognizer.setTranslation(CGPoint.zero, in: view.superview)
+        }else if panGestureRecognizer.state == .ended{
+            var newFrame = self.backImageView.frame
+            newFrame = self.handleBorderOverflow(newFrame)
+            UIView.animate(withDuration: 0.3) {
+                self.backImageView.frame = newFrame
+                self.latestFrame = newFrame
+            }
+        }
     }
 
 
@@ -174,8 +181,49 @@ class EWPhotoCropViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     @objc private func onClickConfirmButton(){
-
+        if delegate != nil{
+            if self.delegate!.responds(to: #selector(EWImageCropperDelegate.imageCropper(_:didFinished:))) {
+                self.delegate!.imageCropper(self, didFinished: self.getSubImage())
+            }
+        }
     }
+    private func getSubImage() -> UIImage {
+        let squareFrame = self.cropFrame!
+        let scaleRatio = self.latestFrame!.size.width / self.selectedPhoto.size.width
+        var x = (squareFrame.origin.x - self.latestFrame!.origin.x) / scaleRatio
+        var y = (squareFrame.origin.y - self.latestFrame!.origin.y) / scaleRatio
+        var w = squareFrame.size.width / scaleRatio
+        var h = squareFrame.size.height / scaleRatio
+        if self.latestFrame!.size.width < self.cropFrame!.size.width {
+            let newW = self.selectedPhoto.size.width
+            let newH = newW * (self.cropFrame!.size.height / self.cropFrame!.size.width)
+            x = 0;
+            y = y + (h - newH) / 2
+            w = newH
+            h = newH
+        }
+        if self.latestFrame!.size.height < self.cropFrame!.size.height {
+            let newH = self.selectedPhoto.size.height
+            let newW = newH * (self.cropFrame!.size.width / self.cropFrame!.size.height)
+            x = x + (w - newW) / 2
+            y = 0
+            w = newH
+            h = newH
+        }
+
+        let myImageRect = CGRect(x: x, y: y, width: w, height: h)
+        let imageRef = self.selectedPhoto.cgImage
+        let subImageRef = imageRef?.cropping(to: myImageRect)
+        let size:CGSize = CGSize(width: myImageRect.size.width, height: myImageRect.size.height)
+        UIGraphicsBeginImageContext(size)
+        let context:CGContext = UIGraphicsGetCurrentContext()!
+        context.draw(subImageRef!, in: myImageRect)
+        let smallImage = UIImage(cgImage: subImageRef!)
+        UIGraphicsEndImageContext()
+        return smallImage
+    }
+
+
     /// 修正size不小于初始值,不大于最大值
     ///
     /// - Parameter newFrame: 变更过的frame
@@ -209,7 +257,7 @@ class EWPhotoCropViewController: UIViewController {
             newFrame.origin.y = self.cropFrame!.origin.y
         }
         if newFrame.maxY < self.cropFrame!.origin.y + self.cropFrame!.size.height {
-            newFrame.origin.y = self.cropFrame!.origin.y + (self.cropFrame!.size.height - newFrame.size.height) / 2
+            newFrame.origin.y = self.cropFrame!.origin.y + self.cropFrame!.size.height - newFrame.size.height
         }
         if self.backImageView.frame.size.width > self.backImageView.frame.size.height && newFrame.size.height <= self.cropFrame!.size.height {
             newFrame.origin.y = self.cropFrame!.origin.y + (self.cropFrame!.size.height - newFrame.size.height) / 2

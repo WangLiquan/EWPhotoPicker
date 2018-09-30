@@ -31,7 +31,9 @@ class ViewController: UIViewController {
     }
 
     @objc private func onClickPhotoButton(){
-        let nvc = UINavigationController(rootViewController: EWPhotoCollectionViewController())
+        let vc = EWPhotoCollectionViewController()
+        vc.delegate = self
+        let nvc = UINavigationController(rootViewController: vc)
         nvc.navigationBar.isHidden = true
         self.present(nvc, animated: true, completion: nil)
     }
@@ -39,6 +41,14 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+
+
+}
+extension ViewController: EWImageCropperDelegate{
+    func imageCropper(_ cropperViewController: EWPhotoCropViewController, didFinished editImg: UIImage) {
+        cropperViewController.navigationController?.dismiss(animated: true, completion: nil)
+        self.imageView.image = editImg
     }
 
 
