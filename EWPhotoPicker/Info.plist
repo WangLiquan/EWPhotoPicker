@@ -22,10 +22,12 @@
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>相册权限</string>
-    <key>NSCameraUsageDescription</key>
-    <string>相机权限</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>相册权限</string>
+	<key>NSCameraUsageDescription</key>
+	<string>相机权限</string>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<true/>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>

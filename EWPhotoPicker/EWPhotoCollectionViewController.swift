@@ -47,7 +47,7 @@ class EWPhotoCollectionViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.alwaysBounceVertical = true
-        for i in 0 ..< photoArray.count{
+        for i in 0 ..< photoArray.count+1{
             collectionView.register(EWPhotoCollectionViewCell.self, forCellWithReuseIdentifier: "EWPhotoCollectionViewCell\(i)")
         }
         self.view.addSubview(collectionView)
@@ -61,7 +61,19 @@ class EWPhotoCollectionViewController: UIViewController {
 
     }
 
+    private func cameraShow(){
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            let picker = UIImagePickerController()
+            picker.sourceType = .camera
+            picker.delegate = self
+            picker.allowsEditing = false
+            self.present(picker, animated: true, completion: nil)
+        } else {
+            print("模拟器中无法打开照相机,请在真机中使用")
+        }
+    }
 
+    
 }
 
 //MARK: - CollectionViewDelegate
@@ -71,11 +83,15 @@ extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectio
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         /// 返回数据数组.count 加一个新建按钮
-        return self.photoArray.count
+        return self.photoArray.count + 1
     }
     /// cell点击方法
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        manager.getPhotoData(index: indexPath.row) { (data, infoDic) in
+        guard indexPath.row != 0 else {
+            cameraShow()
+            return
+        }
+        manager.getPhotoData(index: indexPath.row - 1) { (data, infoDic) in
             guard data != nil else { return }
             let image = UIImage(data: data!)
             let VC = EWPhotoCropViewController(image: image!)
@@ -87,7 +103,8 @@ extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectio
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier:  "EWPhotoCollectionViewCell\(indexPath.row)", for: indexPath) as? EWPhotoCollectionViewCell else {
             return EWPhotoCollectionViewCell()
         }
-        cell.setData(image: photoArray[indexPath.row])
+        guard indexPath.row > 0 else { return cell }
+        cell.setData(image: photoArray[indexPath.row - 1])
         cell.backgroundColor = UIColor.brown
         return cell
     }
@@ -95,4 +112,34 @@ extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectio
         return EWPickerManager.pickerPhotoSize
     }
 }
+
+// MARK: - UIImagePickerControllerDelegate & UINavigationControllerDelegate
+extension EWPhotoCollectionViewController:UIImagePickerControllerDelegate& UINavigationControllerDelegate{
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        picker.dismiss(animated: true, completion: { () -> Void in
+        })
+        //相册中还可能是视频,所以这里需要判断选择的是不是图片
+        let type: String = (info[UIImagePickerControllerMediaType] as! String)
+        //当选择的类型是图片
+        if type == "public.image" {
+            let image:UIImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+            //先把图片转成NSData
+            let data = UIImageJPEGRepresentation(image, 0.4)
+            //图片保存的路径 //这里将图片放在沙盒的documents文件夹中
+            let DocumentsPath:String = NSHomeDirectory()+"/Documents"
+            //文件管理器
+            let fileManager = FileManager.default
+            //把刚刚图片转换的data对象拷贝至沙盒中 并保存为image.png
+            try! fileManager.createDirectory(atPath: DocumentsPath, withIntermediateDirectories: true, attributes: nil)
+            fileManager.createFile(atPath: DocumentsPath + "/image.png", contents: data, attributes: nil)
+            //得到选择后沙盒中图片的完整路径
+            let filePath = DocumentsPath + "/image.png"
+            let previewImage = UIImage(contentsOfFile: filePath)
+            let pcvc = EWPhotoCropViewController(image: previewImage!)
+            pcvc.delegate = self.delegate
+            self.navigationController?.pushViewController(pcvc, animated: true)
+        }
+    }
+}
+
 

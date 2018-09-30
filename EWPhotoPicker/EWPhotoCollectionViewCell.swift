@@ -10,11 +10,13 @@ import UIKit
 
 class EWPhotoCollectionViewCell: UICollectionViewCell {
     static let identifier = "EWPhotoCollectionViewCell"
-    
+
     private var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds  = true
+        imageView.backgroundColor = UIColor.black
+        imageView.image = UIImage(named: "image_camera")
         return imageView
     }()
     override init(frame: CGRect) {

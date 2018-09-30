@@ -49,7 +49,7 @@ class EWPhotoCropViewController: UIViewController {
     }
     convenience init(image: UIImage) {
         self.init(nibName: nil, bundle: nil)
-        self.selectedPhoto = image
+        self.selectedPhoto = self.fixOrientation(image)
         self.backImageView.image = selectedPhoto
     }
     required init?(coder aDecoder: NSCoder) {
@@ -265,5 +265,50 @@ class EWPhotoCropViewController: UIViewController {
         return newFrame
     }
 
+    // 保证图片方向
+    func fixOrientation(_ srcImg:UIImage) -> UIImage {
+        if srcImg.imageOrientation == UIImageOrientation.up {
+            return srcImg
+        }
+        var transform = CGAffineTransform.identity
+        switch srcImg.imageOrientation {
+        case UIImageOrientation.down, UIImageOrientation.downMirrored:
+            transform = transform.translatedBy(x: srcImg.size.width, y: srcImg.size.height)
+            transform = transform.rotated(by: .pi)
+        case UIImageOrientation.left, UIImageOrientation.leftMirrored:
+            transform = transform.translatedBy(x: srcImg.size.width, y: 0)
+            transform = transform.rotated(by: .pi/2)
+        case UIImageOrientation.right, UIImageOrientation.rightMirrored:
+            transform = transform.translatedBy(x: 0, y: srcImg.size.height)
+            transform = transform.rotated(by: -.pi/2)
+        case UIImageOrientation.up, UIImageOrientation.upMirrored: break
+        }
+        switch srcImg.imageOrientation {
+        case UIImageOrientation.upMirrored, UIImageOrientation.downMirrored:
+            transform = transform.translatedBy(x: srcImg.size.width, y: 0)
+            transform = transform.scaledBy(x: -1, y: 1)
+        case UIImageOrientation.leftMirrored, UIImageOrientation.rightMirrored:
+            transform = transform.translatedBy(x: srcImg.size.height, y: 0)
+            transform = transform.scaledBy(x: -1, y: 1)
+        case UIImageOrientation.up, UIImageOrientation.down, UIImageOrientation.left, UIImageOrientation.right:break
+        }
+
+        // 上下文
+        let ctx:CGContext = CGContext(data: nil, width: Int(srcImg.size.width), height: Int(srcImg.size.height), bitsPerComponent: srcImg.cgImage!.bitsPerComponent, bytesPerRow: 0, space: srcImg.cgImage!.colorSpace!, bitmapInfo: srcImg.cgImage!.bitmapInfo.rawValue)!
+
+        ctx.concatenate(transform)
+        switch srcImg.imageOrientation {
+        case UIImageOrientation.left, UIImageOrientation.leftMirrored, UIImageOrientation.right, UIImageOrientation.rightMirrored:
+            ctx.draw(srcImg.cgImage!, in: CGRect(x: 0, y: 0, width: srcImg.size.height, height: srcImg.size.width))
+        default:
+            ctx.draw(srcImg.cgImage!, in: CGRect(x: 0, y: 0, width: srcImg.size.width, height: srcImg.size.height))
+        }
+
+        let cgImg:CGImage = ctx.makeImage()!
+        let img:UIImage = UIImage(cgImage: cgImg)
+
+        ctx.closePath()
+        return img
+    }
 
 }
