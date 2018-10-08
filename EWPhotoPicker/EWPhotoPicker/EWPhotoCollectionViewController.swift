@@ -9,19 +9,7 @@
 import UIKit
 
 class EWPhotoCollectionViewController: UIViewController {
-
-    private let navigationBar: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: ScreenInfo.Width, height: 88))
-        let leftButton = UIButton(frame: CGRect(x: 0, y: 0, width: 64, height: 88))
-        leftButton.setTitle("返回", for: .normal)
-        leftButton.setTitleColor(UIColor.black, for: .normal)
-        leftButton.addTarget(self, action: #selector(onClickBackButton), for: .touchUpInside)
-        view.addSubview(leftButton)
-        return view
-    }()
-
     public var delegate: EWImageCropperDelegate?
-
     private let manager =  EWPickerManager()
     private var photoArray = [UIImage]()
 
@@ -35,14 +23,21 @@ class EWPhotoCollectionViewController: UIViewController {
         return collectionView
     }()
 
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "相册"
         getPhotoData()
         drawMyView()
+        drawMyNavigationBar()
     }
     private func drawMyView(){
-        self.navigationBar.isHidden = true
-        self.view.addSubview(navigationBar)
         self.view.backgroundColor = UIColor.white
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -51,6 +46,10 @@ class EWPhotoCollectionViewController: UIViewController {
             collectionView.register(EWPhotoCollectionViewCell.self, forCellWithReuseIdentifier: "EWPhotoCollectionViewCell\(i)")
         }
         self.view.addSubview(collectionView)
+    }
+    private func drawMyNavigationBar(){
+        let button = UIBarButtonItem(image: EWBundle.imageFromBundle("image_back"), style: .plain, target: self, action: #selector(onClickBackButton))
+        self.navigationItem.leftBarButtonItem = button
     }
 
     @objc private func onClickBackButton(){

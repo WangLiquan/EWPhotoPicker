@@ -59,6 +59,7 @@ class EWPhotoCropViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         drawMyView()
+        drawMyNavigationBar()
     }
     private func drawMyView(){
         self.view.backgroundColor = UIColor.black
@@ -69,6 +70,13 @@ class EWPhotoCropViewController: UIViewController {
         overlayClipping()
         drawBottomButtonView()
         addGestureRecognizers()
+    }
+    private func drawMyNavigationBar(){
+        let button = UIBarButtonItem(image: EWBundle.imageFromBundle("image_back"), style: .plain, target: self, action: #selector(onClickBackButton))
+        self.navigationItem.leftBarButtonItem = button
+    }
+    @objc private func onClickBackButton(){
+        self.navigationController?.popViewController(animated: true)
     }
     private func initViewsFrame(){
         let cropWidth = UIScreen.main.bounds.width

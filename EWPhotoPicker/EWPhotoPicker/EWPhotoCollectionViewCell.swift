@@ -16,7 +16,7 @@ class EWPhotoCollectionViewCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds  = true
         imageView.backgroundColor = UIColor.black
-        imageView.image = UIImage(named: "image_camera")
+        imageView.image = EWBundle.imageFromBundle("image_camera")
         return imageView
     }()
     override init(frame: CGRect) {

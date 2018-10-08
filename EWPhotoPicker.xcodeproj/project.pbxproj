@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		790CBE23216B07E900973B5D /* EWPhotoPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790CBE22216B07E900973B5D /* EWPhotoPickerViewController.swift */; };
+		790CBE45216B296300973B5D /* EWPhotoPicker.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 790CBE44216B296300973B5D /* EWPhotoPicker.bundle */; };
 		795C3BAC2160A120000A8CDD /* EWPhotoCropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795C3BAB2160A120000A8CDD /* EWPhotoCropViewController.swift */; };
 		795C3BAE2160B29D000A8CDD /* EWCommonHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795C3BAD2160B29D000A8CDD /* EWCommonHelper.swift */; };
-		795C3BB12160C5FA000A8CDD /* image_camera@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 795C3BAF2160C5FA000A8CDD /* image_camera@3x.png */; };
-		795C3BB22160C5FA000A8CDD /* image_camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 795C3BB02160C5FA000A8CDD /* image_camera@2x.png */; };
 		798781AF215F10F200322244 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798781AE215F10F200322244 /* AppDelegate.swift */; };
 		798781B1215F10F200322244 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798781B0215F10F200322244 /* ViewController.swift */; };
 		798781B4215F10F200322244 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 798781B2215F10F200322244 /* Main.storyboard */; };
@@ -41,10 +41,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		790CBE22216B07E900973B5D /* EWPhotoPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EWPhotoPickerViewController.swift; sourceTree = "<group>"; };
+		790CBE44216B296300973B5D /* EWPhotoPicker.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = EWPhotoPicker.bundle; sourceTree = "<group>"; };
 		795C3BAB2160A120000A8CDD /* EWPhotoCropViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EWPhotoCropViewController.swift; sourceTree = "<group>"; };
 		795C3BAD2160B29D000A8CDD /* EWCommonHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EWCommonHelper.swift; sourceTree = "<group>"; };
-		795C3BAF2160C5FA000A8CDD /* image_camera@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image_camera@3x.png"; sourceTree = "<group>"; };
-		795C3BB02160C5FA000A8CDD /* image_camera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image_camera@2x.png"; sourceTree = "<group>"; };
 		798781AB215F10F200322244 /* EWPhotoPicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EWPhotoPicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		798781AE215F10F200322244 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		798781B0215F10F200322244 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -88,6 +88,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		790CBE46216B2B5F00973B5D /* EWPhotoPicker */ = {
+			isa = PBXGroup;
+			children = (
+				790CBE44216B296300973B5D /* EWPhotoPicker.bundle */,
+				790CBE22216B07E900973B5D /* EWPhotoPickerViewController.swift */,
+				795C3BAD2160B29D000A8CDD /* EWCommonHelper.swift */,
+				798781DC215F16B000322244 /* EWPickerManager.swift */,
+				79FE75F7215F5AC2008C17D0 /* EWPhotoCollectionViewController.swift */,
+				795C3BAB2160A120000A8CDD /* EWPhotoCropViewController.swift */,
+				79FE75F9215F5BF3008C17D0 /* EWPhotoCollectionViewCell.swift */,
+			);
+			path = EWPhotoPicker;
+			sourceTree = "<group>";
+		};
 		798781A2215F10F200322244 = {
 			isa = PBXGroup;
 			children = (
@@ -111,15 +125,9 @@
 		798781AD215F10F200322244 /* EWPhotoPicker */ = {
 			isa = PBXGroup;
 			children = (
+				790CBE46216B2B5F00973B5D /* EWPhotoPicker */,
 				798781AE215F10F200322244 /* AppDelegate.swift */,
 				798781B0215F10F200322244 /* ViewController.swift */,
-				795C3BAD2160B29D000A8CDD /* EWCommonHelper.swift */,
-				798781DC215F16B000322244 /* EWPickerManager.swift */,
-				795C3BB02160C5FA000A8CDD /* image_camera@2x.png */,
-				795C3BAF2160C5FA000A8CDD /* image_camera@3x.png */,
-				79FE75F7215F5AC2008C17D0 /* EWPhotoCollectionViewController.swift */,
-				795C3BAB2160A120000A8CDD /* EWPhotoCropViewController.swift */,
-				79FE75F9215F5BF3008C17D0 /* EWPhotoCollectionViewCell.swift */,
 				798781B2215F10F200322244 /* Main.storyboard */,
 				798781B5215F10F500322244 /* Assets.xcassets */,
 				798781B7215F10F500322244 /* LaunchScreen.storyboard */,
@@ -251,9 +259,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				795C3BB12160C5FA000A8CDD /* image_camera@3x.png in Resources */,
+				790CBE45216B296300973B5D /* EWPhotoPicker.bundle in Resources */,
 				798781B9215F10F500322244 /* LaunchScreen.storyboard in Resources */,
-				795C3BB22160C5FA000A8CDD /* image_camera@2x.png in Resources */,
 				798781B6215F10F500322244 /* Assets.xcassets in Resources */,
 				798781B4215F10F200322244 /* Main.storyboard in Resources */,
 			);
@@ -284,6 +291,7 @@
 				795C3BAC2160A120000A8CDD /* EWPhotoCropViewController.swift in Sources */,
 				79FE75F8215F5AC3008C17D0 /* EWPhotoCollectionViewController.swift in Sources */,
 				798781AF215F10F200322244 /* AppDelegate.swift in Sources */,
+				790CBE23216B07E900973B5D /* EWPhotoPickerViewController.swift in Sources */,
 				798781DD215F16B000322244 /* EWPickerManager.swift in Sources */,
 				79FE75FA215F5BF3008C17D0 /* EWPhotoCollectionViewCell.swift in Sources */,
 				795C3BAE2160B29D000A8CDD /* EWCommonHelper.swift in Sources */,
