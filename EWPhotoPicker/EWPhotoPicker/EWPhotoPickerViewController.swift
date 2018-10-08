@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+/// 通用navigationController
 class EWPhotoPickerViewController: UINavigationController {
 
     override func viewDidLoad() {
@@ -16,6 +16,7 @@ class EWPhotoPickerViewController: UINavigationController {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
+    /// 将delegate传入,可自定制tintColor,默认黑色
     init(photoDelegate: EWImageCropperDelegate, tintColor: UIColor = UIColor.black) {
         let vc = EWPhotoCollectionViewController()
         vc.delegate = photoDelegate

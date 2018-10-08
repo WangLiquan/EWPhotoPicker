@@ -9,14 +9,11 @@
 import UIKit
 
 class EWPhotoCollectionViewCell: UICollectionViewCell {
-    static let identifier = "EWPhotoCollectionViewCell"
-
     private var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds  = true
         imageView.backgroundColor = UIColor.black
-        imageView.image = EWBundle.imageFromBundle("image_camera")
         return imageView
     }()
     override init(frame: CGRect) {
@@ -30,7 +27,7 @@ class EWPhotoCollectionViewCell: UICollectionViewCell {
         self.addSubview(imageView)
         imageView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height)
     }
-    public func setData(image: UIImage){
+    public func setData(image: UIImage = EWBundle.imageFromBundle("image_camera")!){
        self.imageView.image = image
     }
 }

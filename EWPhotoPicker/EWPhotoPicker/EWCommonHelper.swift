@@ -22,13 +22,6 @@ struct ScreenInfo {
         return isIphoneX() ? 88 : 64;
     }
 }
-//便捷的类方法
-extension UIColor {
-    class func colorWithRGBA(r:CGFloat,g:CGFloat,b:CGFloat,a:CGFloat) -> UIColor {
-        return UIColor(red: r/255, green: g/255, blue: b/255, alpha: a)
-    }
-}
-
 /// 获取图片
 struct EWBundle {
     

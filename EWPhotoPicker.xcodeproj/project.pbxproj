@@ -92,8 +92,8 @@
 			isa = PBXGroup;
 			children = (
 				790CBE44216B296300973B5D /* EWPhotoPicker.bundle */,
-				790CBE22216B07E900973B5D /* EWPhotoPickerViewController.swift */,
 				795C3BAD2160B29D000A8CDD /* EWCommonHelper.swift */,
+				790CBE22216B07E900973B5D /* EWPhotoPickerViewController.swift */,
 				798781DC215F16B000322244 /* EWPickerManager.swift */,
 				79FE75F7215F5AC2008C17D0 /* EWPhotoCollectionViewController.swift */,
 				795C3BAB2160A120000A8CDD /* EWPhotoCropViewController.swift */,

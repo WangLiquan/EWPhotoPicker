@@ -42,6 +42,7 @@ class EWPhotoCollectionViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.alwaysBounceVertical = true
+        /// 使用动态注册阻止collectionView重用
         for i in 0 ..< photoArray.count+1{
             collectionView.register(EWPhotoCollectionViewCell.self, forCellWithReuseIdentifier: "EWPhotoCollectionViewCell\(i)")
         }
@@ -51,15 +52,11 @@ class EWPhotoCollectionViewController: UIViewController {
         let button = UIBarButtonItem(image: EWBundle.imageFromBundle("image_back"), style: .plain, target: self, action: #selector(onClickBackButton))
         self.navigationItem.leftBarButtonItem = button
     }
-
-    @objc private func onClickBackButton(){
-        self.dismiss(animated: true, completion: nil)
-    }
-    func getPhotoData(){
+    /// 获取所有照片
+    private func getPhotoData(){
         self.photoArray = manager.getAllPhoto()
-
     }
-
+    /// 调用相机
     private func cameraShow(){
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             let picker = UIImagePickerController()
@@ -71,8 +68,9 @@ class EWPhotoCollectionViewController: UIViewController {
             print("模拟器中无法打开照相机,请在真机中使用")
         }
     }
-
-    
+    @objc private func onClickBackButton(){
+        self.dismiss(animated: true, completion: nil)
+    }
 }
 
 //MARK: - CollectionViewDelegate
@@ -102,9 +100,11 @@ extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectio
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier:  "EWPhotoCollectionViewCell\(indexPath.row)", for: indexPath) as? EWPhotoCollectionViewCell else {
             return EWPhotoCollectionViewCell()
         }
-        guard indexPath.row > 0 else { return cell }
+        guard indexPath.row > 0 else {
+            cell.setData()
+            return cell
+        }
         cell.setData(image: photoArray[indexPath.row - 1])
-        cell.backgroundColor = UIColor.brown
         return cell
     }
     internal func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
