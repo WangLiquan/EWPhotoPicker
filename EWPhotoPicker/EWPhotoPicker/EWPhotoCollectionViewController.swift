@@ -10,8 +10,8 @@ import UIKit
 
 class EWPhotoCollectionViewController: UIViewController {
     public var delegate: EWImageCropperDelegate?
-    private let manager =  EWPickerManager()
-    private var photoArray = [UIImage]()
+    public let manager =  EWPickerManager()
+    public var photoArray = [UIImage]()
 
     private let collectionView: UICollectionView = {
         let defaultLayout = UICollectionViewFlowLayout()
@@ -57,7 +57,7 @@ class EWPhotoCollectionViewController: UIViewController {
         self.photoArray = manager.getAllPhoto()
     }
     /// 调用相机
-    private func cameraShow(){
+    public func cameraShow(){
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             let picker = UIImagePickerController()
             picker.sourceType = .camera
