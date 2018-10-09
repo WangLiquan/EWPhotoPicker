@@ -14,3 +14,22 @@
 <br>
 
 ![效果图预览](https://github.com/WangLiquan/EWPhotoPicker/raw/master/images/demonstration.gif)
+
+# 使用方法:
+将EWPhotoPicker文件夹拖入项目,调用时:
+```
+/// 调用控制器遵循EWImageCropperDelegate,实现唯一的方法.
+extension ViewController: EWImageCropperDelegate{
+    func imageCropper(_ cropperViewController: EWPhotoCropViewController, didFinished editImg: UIImage) {
+        cropperViewController.navigationController?.dismiss(animated: true, completion: nil)
+        ///对选取并编辑后的图片直接使用
+        self.imageView.image = editImg
+    }
+}
+/// 弹出控制器时时直接present就可以
+@objc private func onClickPhotoButton(){
+    let nnvc = EWPhotoPickerViewController(photoDelegate: self)
+    self.present(nnvc, animated: true, completion: nil)
+}
+
+```

@@ -73,7 +73,7 @@ class EWPickerManager: NSObject {
         options.predicate = NSPredicate.init(format: "mediaType in %@", [PHAssetMediaType.image.rawValue])
         //通过检索条件检索出符合检索条件的所有数据，也就是所有的照片
         let allResult = PHAsset.fetchAssets(with: options)
-        //将获取的相册加入到相册的数组中
+        //将获取的相片加入到相片的数组中
         photoAlbum = allResult
     }
 }
