@@ -32,6 +32,8 @@ class ViewController: UIViewController {
 
     @objc private func onClickPhotoButton(){
         let nnvc = EWPhotoPickerViewController(photoDelegate: self)
+        /// 可以传入navigationBar.tintColor以保证与项目相同展示效果.默认不传为UIColor.black
+//        let PPVC = EWPhotoPickerViewController(photoDelegate: self, tintColor: UIColor.gray)
         self.present(nnvc, animated: true, completion: nil)
     }
 

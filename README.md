@@ -29,6 +29,8 @@ extension ViewController: EWImageCropperDelegate{
 /// 弹出控制器时时直接present就可以
 @objc private func onClickPhotoButton(){
     let nnvc = EWPhotoPickerViewController(photoDelegate: self)
+    /// 可以传入navigationBar.tintColor以保证与项目相同展示效果.默认不传为UIColor.black
+//        let PPVC = EWPhotoPickerViewController(photoDelegate: self, tintColor: UIColor.gray)
     self.present(nnvc, animated: true, completion: nil)
 }
 
