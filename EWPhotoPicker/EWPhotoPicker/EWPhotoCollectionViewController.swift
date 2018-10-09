@@ -10,10 +10,10 @@ import UIKit
 
 class EWPhotoCollectionViewController: UIViewController {
     public var delegate: EWImageCropperDelegate?
-    public let manager =  EWPickerManager()
-    public var photoArray = [UIImage]()
+    fileprivate let manager =  EWPickerManager()
+    fileprivate var photoArray = [UIImage]()
 
-    private let collectionView: UICollectionView = {
+    fileprivate let collectionView: UICollectionView = {
         let defaultLayout = UICollectionViewFlowLayout()
         defaultLayout.scrollDirection = UICollectionViewScrollDirection.vertical//设置垂直显示
         defaultLayout.minimumLineSpacing = 3 //每个相邻的layout的上下间隔
@@ -57,7 +57,7 @@ class EWPhotoCollectionViewController: UIViewController {
         self.photoArray = manager.getAllPhoto()
     }
     /// 调用相机
-    public func cameraShow(){
+    fileprivate func cameraShow(){
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             let picker = UIImagePickerController()
             picker.sourceType = .camera
