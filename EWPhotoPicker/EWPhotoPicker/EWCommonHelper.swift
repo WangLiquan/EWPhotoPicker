@@ -23,9 +23,9 @@ struct ScreenInfo {
     }
 }
 /// 获取图片
-struct EWBundle {
+public struct EWBundle {
     
-    static func imageFromBundle(_ imageName: String) -> UIImage? {
+    static public func imageFromBundle(_ imageName: String) -> UIImage? {
         var imageName = imageName
         if UIScreen.main.scale == 2 {
             imageName = imageName + "@2x"

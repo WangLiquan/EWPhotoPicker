@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EWPhotoCollectionViewController: UIViewController {
+public class EWPhotoCollectionViewController: UIViewController {
     public var delegate: EWImageCropperDelegate?
     fileprivate let manager =  EWPickerManager()
     fileprivate var photoArray = [UIImage]()
@@ -30,7 +30,7 @@ class EWPhotoCollectionViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         self.title = "相册"
         getPhotoData()
@@ -78,7 +78,7 @@ extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectio
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         /// 返回数据数组.count 加一个新建按钮
         return self.photoArray.count + 1
     }
@@ -96,7 +96,7 @@ extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectio
             self.navigationController?.pushViewController(VC, animated: true)
         }
     }
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier:  "EWPhotoCollectionViewCell\(indexPath.row)", for: indexPath) as? EWPhotoCollectionViewCell else {
             return EWPhotoCollectionViewCell()
         }

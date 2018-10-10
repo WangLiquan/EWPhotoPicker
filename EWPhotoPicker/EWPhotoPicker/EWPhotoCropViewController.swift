@@ -8,11 +8,11 @@
 
 import UIKit
 /// 裁切后的照片返回协议
-@objc protocol EWImageCropperDelegate : NSObjectProtocol {
+@objc public protocol EWImageCropperDelegate : NSObjectProtocol {
     func imageCropper(_ cropperViewController:EWPhotoCropViewController, didFinished editImg:UIImage)
 }
 /// 选中图片后裁切控制器
-class EWPhotoCropViewController: UIViewController {
+public class EWPhotoCropViewController: UIViewController {
     /// 初始frame
     private var oldFrame: CGRect?
     /// 最大frame
@@ -62,7 +62,7 @@ class EWPhotoCropViewController: UIViewController {
         super.init(coder: aDecoder)
     }
 
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         drawMyView()
         drawMyNavigationBar()

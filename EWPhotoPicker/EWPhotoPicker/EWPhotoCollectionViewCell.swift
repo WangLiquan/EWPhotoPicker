@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EWPhotoCollectionViewCell: UICollectionViewCell {
+public class EWPhotoCollectionViewCell: UICollectionViewCell {
     private var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
