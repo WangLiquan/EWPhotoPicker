@@ -75,7 +75,7 @@ public class EWPhotoCollectionViewController: UIViewController {
 
 //MARK: - CollectionViewDelegate
 extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    private func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -83,7 +83,7 @@ extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectio
         return self.photoArray.count + 1
     }
     /// cell点击方法
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    private func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath.row != 0 else {
             cameraShow()
             return
@@ -114,7 +114,7 @@ extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectio
 
 // MARK: - UIImagePickerControllerDelegate & UINavigationControllerDelegate
 extension EWPhotoCollectionViewController:UIImagePickerControllerDelegate& UINavigationControllerDelegate{
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    private func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         picker.dismiss(animated: true, completion: { () -> Void in
         })
         //相册中还可能是视频,所以这里需要判断选择的是不是图片
