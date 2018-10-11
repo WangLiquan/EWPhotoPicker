@@ -15,7 +15,7 @@ open class EWPhotoCollectionViewController: UIViewController {
 
     public let collectionView: UICollectionView = {
         let defaultLayout = UICollectionViewFlowLayout()
-        defaultLayout.scrollDirection = UICollectionViewScrollDirection.vertical//设置垂直显示
+        defaultLayout.scrollDirection = UICollectionView.ScrollDirection.vertical//设置垂直显示
         defaultLayout.minimumLineSpacing = 3 //每个相邻的layout的上下间隔
         defaultLayout.minimumInteritemSpacing = 3.0 //每个相邻layout的左右间隔
         let collectionView = UICollectionView(frame:CGRect(x: 0, y: 88, width: ScreenInfo.Width, height: ScreenInfo.Height - ScreenInfo.navigationHeight), collectionViewLayout: defaultLayout)
@@ -114,16 +114,17 @@ extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectio
 
 // MARK: - UIImagePickerControllerDelegate & UINavigationControllerDelegate
 extension EWPhotoCollectionViewController:UIImagePickerControllerDelegate& UINavigationControllerDelegate{
-    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: { () -> Void in
         })
         //相册中还可能是视频,所以这里需要判断选择的是不是图片
-        let type: String = (info[UIImagePickerControllerMediaType] as! String)
+        let type: String = (info[UIImagePickerController.InfoKey.mediaType] as! String)
         //当选择的类型是图片
         if type == "public.image" {
-            let image:UIImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+            let image:UIImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
             //先把图片转成NSData
-            let data = UIImageJPEGRepresentation(image, 0.4)
+            let data = image.jpegData(compressionQuality: 0.4)
             //图片保存的路径 //这里将图片放在沙盒的documents文件夹中
             let DocumentsPath:String = NSHomeDirectory()+"/Documents"
             //文件管理器
@@ -138,6 +139,11 @@ extension EWPhotoCollectionViewController:UIImagePickerControllerDelegate& UINav
             pcvc.delegate = self.delegate
             self.navigationController?.pushViewController(pcvc, animated: true)
         }
+
+    }
+
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+
     }
 }
 

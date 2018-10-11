@@ -2,7 +2,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "EWPhotoPicker"
-  s.version      = "0.0.6"
+  s.version      = "0.0.7"
   #主要标题
   s.summary      = "a swift photo picker"
   #详细描述（必须大于主要标题的长度）
@@ -20,5 +20,5 @@ Pod::Spec.new do |s|
   s.framework    = "UIKit","Foundation","Photos"
   s.requires_arc = true
   s.resource     = "EWPhotoPicker/EWPhotoPicker/EWPhotoPicker.bundle"
-
+  s.swift_version = '4.2'
 end

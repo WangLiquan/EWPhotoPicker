@@ -113,25 +113,25 @@ public class EWPhotoCropViewController: UIViewController {
         cancelBtn.backgroundColor = UIColor.black
         cancelBtn.alpha = 0.5
         cancelBtn.titleLabel?.textColor = UIColor.white
-        cancelBtn.setTitle("取消", for: UIControlState())
+        cancelBtn.setTitle("取消", for: UIControl.State())
         cancelBtn.titleLabel?.font = UIFont.systemFont(ofSize: 18.0)
         cancelBtn.titleLabel?.textAlignment = NSTextAlignment.center
         cancelBtn.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         cancelBtn.titleLabel?.numberOfLines = 0
-        cancelBtn.titleEdgeInsets = UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0)
-        cancelBtn.addTarget(self, action:#selector(onClickCancelbuton), for: UIControlEvents.touchUpInside)
+        cancelBtn.titleEdgeInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)
+        cancelBtn.addTarget(self, action:#selector(onClickCancelbuton), for: UIControl.Event.touchUpInside)
         self.view.addSubview(cancelBtn)
         let confirmBtn:UIButton = UIButton(frame: CGRect(x: self.view.frame.size.width - 100.0, y: self.view.frame.size.height - 50.0, width: 100, height: 50))
         confirmBtn.backgroundColor = UIColor.black
         confirmBtn.alpha = 0.5
         confirmBtn.titleLabel?.textColor = UIColor.white
-        confirmBtn.setTitle("确定", for: UIControlState())
+        confirmBtn.setTitle("确定", for: UIControl.State())
         confirmBtn.titleLabel?.font = UIFont.systemFont(ofSize: 18.0)
         confirmBtn.titleLabel?.textAlignment = NSTextAlignment.center
         confirmBtn.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         confirmBtn.titleLabel?.numberOfLines = 0
-        confirmBtn.titleEdgeInsets = UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0)
-        confirmBtn.addTarget(self, action:#selector(onClickConfirmButton), for: UIControlEvents.touchUpInside)
+        confirmBtn.titleEdgeInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)
+        confirmBtn.addTarget(self, action:#selector(onClickConfirmButton), for: UIControl.Event.touchUpInside)
         self.view.addSubview(confirmBtn)
     }
     /// 修改overlayView.layer.使cropView不被遮挡
@@ -298,36 +298,36 @@ public class EWPhotoCropViewController: UIViewController {
     }
     // 保证图片方向
     func fixOrientation(_ srcImg:UIImage) -> UIImage {
-        if srcImg.imageOrientation == UIImageOrientation.up {
+        if srcImg.imageOrientation == UIImage.Orientation.up {
             return srcImg
         }
         var transform = CGAffineTransform.identity
         switch srcImg.imageOrientation {
-        case UIImageOrientation.down, UIImageOrientation.downMirrored:
+        case UIImage.Orientation.down, UIImage.Orientation.downMirrored:
             transform = transform.translatedBy(x: srcImg.size.width, y: srcImg.size.height)
             transform = transform.rotated(by: .pi)
-        case UIImageOrientation.left, UIImageOrientation.leftMirrored:
+        case UIImage.Orientation.left, UIImage.Orientation.leftMirrored:
             transform = transform.translatedBy(x: srcImg.size.width, y: 0)
             transform = transform.rotated(by: .pi/2)
-        case UIImageOrientation.right, UIImageOrientation.rightMirrored:
+        case UIImage.Orientation.right, UIImage.Orientation.rightMirrored:
             transform = transform.translatedBy(x: 0, y: srcImg.size.height)
             transform = transform.rotated(by: -.pi/2)
-        case UIImageOrientation.up, UIImageOrientation.upMirrored: break
+        case UIImage.Orientation.up, UIImage.Orientation.upMirrored: break
         }
         switch srcImg.imageOrientation {
-        case UIImageOrientation.upMirrored, UIImageOrientation.downMirrored:
+        case UIImage.Orientation.upMirrored, UIImage.Orientation.downMirrored:
             transform = transform.translatedBy(x: srcImg.size.width, y: 0)
             transform = transform.scaledBy(x: -1, y: 1)
-        case UIImageOrientation.leftMirrored, UIImageOrientation.rightMirrored:
+        case UIImage.Orientation.leftMirrored, UIImage.Orientation.rightMirrored:
             transform = transform.translatedBy(x: srcImg.size.height, y: 0)
             transform = transform.scaledBy(x: -1, y: 1)
-        case UIImageOrientation.up, UIImageOrientation.down, UIImageOrientation.left, UIImageOrientation.right:break
+        case UIImage.Orientation.up, UIImage.Orientation.down, UIImage.Orientation.left, UIImage.Orientation.right:break
         }
         // 上下文
         let ctx:CGContext = CGContext(data: nil, width: Int(srcImg.size.width), height: Int(srcImg.size.height), bitsPerComponent: srcImg.cgImage!.bitsPerComponent, bytesPerRow: 0, space: srcImg.cgImage!.colorSpace!, bitmapInfo: srcImg.cgImage!.bitmapInfo.rawValue)!
         ctx.concatenate(transform)
         switch srcImg.imageOrientation {
-        case UIImageOrientation.left, UIImageOrientation.leftMirrored, UIImageOrientation.right, UIImageOrientation.rightMirrored:
+        case UIImage.Orientation.left, UIImage.Orientation.leftMirrored, UIImage.Orientation.right, UIImage.Orientation.rightMirrored:
             ctx.draw(srcImg.cgImage!, in: CGRect(x: 0, y: 0, width: srcImg.size.height, height: srcImg.size.width))
         default:
             ctx.draw(srcImg.cgImage!, in: CGRect(x: 0, y: 0, width: srcImg.size.width, height: srcImg.size.height))

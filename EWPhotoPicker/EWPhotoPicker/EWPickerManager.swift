@@ -58,7 +58,7 @@ class EWPickerManager: NSObject {
     /// - Parameters:
     ///   - index: 照片处在array的index
     ///   - resultHandler: 将获取data回调
-    public func getPhotoData(index: Int, resultHandler: ((Data?, UIImageOrientation) -> Void)?) {
+    public func getPhotoData(index: Int, resultHandler: ((Data?, UIImage.Orientation) -> Void)?) {
         self.photoManage.requestImageData(for: self.photoAlbum[index], options: nil, resultHandler: { (data, str, orientation, hashable) in
             resultHandler?(data, orientation)
         })
