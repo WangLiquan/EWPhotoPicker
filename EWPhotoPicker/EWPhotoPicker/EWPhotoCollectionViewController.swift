@@ -8,12 +8,12 @@
 
 import UIKit
 
-public class EWPhotoCollectionViewController: UIViewController {
+open class EWPhotoCollectionViewController: UIViewController {
     public var delegate: EWImageCropperDelegate?
     fileprivate let manager =  EWPickerManager()
     fileprivate var photoArray = [UIImage]()
 
-    fileprivate let collectionView: UICollectionView = {
+    public let collectionView: UICollectionView = {
         let defaultLayout = UICollectionViewFlowLayout()
         defaultLayout.scrollDirection = UICollectionViewScrollDirection.vertical//设置垂直显示
         defaultLayout.minimumLineSpacing = 3 //每个相邻的layout的上下间隔
@@ -26,11 +26,11 @@ public class EWPhotoCollectionViewController: UIViewController {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         self.title = "相册"
         getPhotoData()
@@ -75,7 +75,7 @@ public class EWPhotoCollectionViewController: UIViewController {
 
 //MARK: - CollectionViewDelegate
 extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
-    private func numberOfSections(in collectionView: UICollectionView) -> Int {
+    public func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -83,7 +83,7 @@ extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectio
         return self.photoArray.count + 1
     }
     /// cell点击方法
-    private func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath.row != 0 else {
             cameraShow()
             return
@@ -107,14 +107,14 @@ extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectio
         cell.setData(image: photoArray[indexPath.row - 1])
         return cell
     }
-    internal func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return EWPickerManager.pickerPhotoSize
     }
 }
 
 // MARK: - UIImagePickerControllerDelegate & UINavigationControllerDelegate
 extension EWPhotoCollectionViewController:UIImagePickerControllerDelegate& UINavigationControllerDelegate{
-    private func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         picker.dismiss(animated: true, completion: { () -> Void in
         })
         //相册中还可能是视频,所以这里需要判断选择的是不是图片

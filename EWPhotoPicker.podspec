@@ -2,7 +2,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "EWPhotoPicker"
-  s.version      = "0.0.5"
+  s.version      = "0.0.6"
   #主要标题
   s.summary      = "a swift photo picker"
   #详细描述（必须大于主要标题的长度）

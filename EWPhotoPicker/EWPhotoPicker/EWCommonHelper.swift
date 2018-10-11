@@ -26,16 +26,13 @@ struct ScreenInfo {
 public struct EWBundle {
     
     static public func imageFromBundle(_ imageName: String) -> UIImage? {
-        var imageName = imageName
-        if UIScreen.main.scale == 2 {
-            imageName = imageName + "@2x"
-        }else if UIScreen.main.scale == 3 {
-            imageName = imageName + "@3x"
+        var bundle = Bundle(for: EWPickerManager.self)
+        if let resourcePath = bundle.path(forResource: "EWPhotoPicker", ofType: "bundle") {
+            if let resourcesBundle = Bundle(path: resourcePath) {
+                bundle = resourcesBundle
+            }
         }
-        let bundle = Bundle.main.path(forResource: "EWPhotoPicker", ofType: "bundle")
-        let imagesBundle = Bundle(path: bundle! + "/images")
-        if let path = imagesBundle?.path(forResource: imageName, ofType: "png") {
-            let image = UIImage(contentsOfFile: path)
+        if let image = UIImage(named: imageName, in: bundle, compatibleWith: nil){
             return image
         }
         return nil
