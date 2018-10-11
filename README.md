@@ -16,12 +16,12 @@
 ![效果图预览](https://github.com/WangLiquan/EWPhotoPicker/raw/master/images/demonstration.gif)
 
 # 添加方法:
-#####1.使用CocoaPods加载.
+1.使用CocoaPods加载.
 在podfile文件中添加
 ```
 pod 'EWPhotoPicker'
 ```
-#####2.直接从github下载项目将EWPhotoPicker文件夹拖入项目.
+2.直接从github下载项目将EWPhotoPicker文件夹拖入项目.
 # 调用方法:
 1.首先给项目info.plist文件中添加相机与相册权限,权限提示自行修改
 ```
