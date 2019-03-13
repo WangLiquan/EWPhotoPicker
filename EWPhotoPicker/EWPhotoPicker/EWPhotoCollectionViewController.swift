@@ -9,7 +9,7 @@
 import UIKit
 
 open class EWPhotoCollectionViewController: UIViewController {
-    public var delegate: EWImageCropperDelegate?
+    public weak var delegate: EWImageCropperDelegate?
     fileprivate let manager =  EWPickerManager()
     fileprivate var photoArray = [UIImage]()
 
@@ -29,7 +29,7 @@ open class EWPhotoCollectionViewController: UIViewController {
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override open func viewDidLoad() {
         super.viewDidLoad()
         self.title = "相册"
@@ -37,27 +37,27 @@ open class EWPhotoCollectionViewController: UIViewController {
         drawMyView()
         drawMyNavigationBar()
     }
-    private func drawMyView(){
+    private func drawMyView() {
         self.view.backgroundColor = UIColor.white
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.alwaysBounceVertical = true
         /// 使用动态注册阻止collectionView重用
-        for i in 0 ..< photoArray.count+1{
+        for i in 0 ..< photoArray.count+1 {
             collectionView.register(EWPhotoCollectionViewCell.self, forCellWithReuseIdentifier: "EWPhotoCollectionViewCell\(i)")
         }
         self.view.addSubview(collectionView)
     }
-    private func drawMyNavigationBar(){
+    private func drawMyNavigationBar() {
         let button = UIBarButtonItem(image: EWBundle.imageFromBundle("image_back"), style: .plain, target: self, action: #selector(onClickBackButton))
         self.navigationItem.leftBarButtonItem = button
     }
     /// 获取所有照片
-    private func getPhotoData(){
+    private func getPhotoData() {
         self.photoArray = manager.getAllPhoto()
     }
     /// 调用相机
-    fileprivate func cameraShow(){
+    fileprivate func cameraShow() {
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             let picker = UIImagePickerController()
             picker.sourceType = .camera
@@ -68,13 +68,13 @@ open class EWPhotoCollectionViewController: UIViewController {
             print("模拟器中无法打开照相机,请在真机中使用")
         }
     }
-    @objc private func onClickBackButton(){
+    @objc private func onClickBackButton() {
         self.dismiss(animated: true, completion: nil)
     }
 }
 
-//MARK: - CollectionViewDelegate
-extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+// MARK: - CollectionViewDelegate
+extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -88,7 +88,7 @@ extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectio
             cameraShow()
             return
         }
-        manager.getPhotoData(index: indexPath.row - 1) { (data, infoDic) in
+        manager.getPhotoData(index: indexPath.row - 1) { (data, _) in
             guard data != nil else { return }
             let image = UIImage(data: data!)
             let VC = EWPhotoCropViewController(image: image!)
@@ -113,16 +113,20 @@ extension EWPhotoCollectionViewController: UICollectionViewDelegate, UICollectio
 }
 
 // MARK: - UIImagePickerControllerDelegate & UINavigationControllerDelegate
-extension EWPhotoCollectionViewController:UIImagePickerControllerDelegate& UINavigationControllerDelegate{
+extension EWPhotoCollectionViewController:UIImagePickerControllerDelegate& UINavigationControllerDelegate {
 
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: { () -> Void in
         })
         //相册中还可能是视频,所以这里需要判断选择的是不是图片
-        let type: String = (info[UIImagePickerController.InfoKey.mediaType] as! String)
+        guard let type = info[UIImagePickerController.InfoKey.mediaURL] as? String else {
+            return
+        }
         //当选择的类型是图片
         if type == "public.image" {
-            let image:UIImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+            guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
+                return
+            }
             //先把图片转成NSData
             let data = image.jpegData(compressionQuality: 0.4)
             //图片保存的路径 //这里将图片放在沙盒的documents文件夹中
@@ -130,7 +134,11 @@ extension EWPhotoCollectionViewController:UIImagePickerControllerDelegate& UINav
             //文件管理器
             let fileManager = FileManager.default
             //把刚刚图片转换的data对象拷贝至沙盒中 并保存为image.png
-            try! fileManager.createDirectory(atPath: DocumentsPath, withIntermediateDirectories: true, attributes: nil)
+            do {
+                try fileManager.createDirectory(atPath: DocumentsPath, withIntermediateDirectories: true, attributes: nil)
+            } catch let error {
+                print(error)
+            }
             fileManager.createFile(atPath: DocumentsPath + "/image.png", contents: data, attributes: nil)
             //得到选择后沙盒中图片的完整路径
             let filePath = DocumentsPath + "/image.png"
@@ -146,5 +154,3 @@ extension EWPhotoCollectionViewController:UIImagePickerControllerDelegate& UINav
 
     }
 }
-
-

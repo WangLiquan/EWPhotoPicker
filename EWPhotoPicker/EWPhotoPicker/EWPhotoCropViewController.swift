@@ -24,7 +24,7 @@ public class EWPhotoCropViewController: UIViewController {
     /// 选中的照片
     private var selectedPhoto: UIImage = UIImage()
 
-    public var delegate: EWImageCropperDelegate?
+    public weak var delegate: EWImageCropperDelegate?
     /// 遮挡在选中imageView上层的半透明View
     private let overlayView: UIView = {
         let view = UIImageView(frame: CGRect(x: 0, y: 0, width: ScreenInfo.Width, height: ScreenInfo.Height))
@@ -67,7 +67,7 @@ public class EWPhotoCropViewController: UIViewController {
         drawMyView()
         drawMyNavigationBar()
     }
-    private func drawMyView(){
+    private func drawMyView() {
         self.view.backgroundColor = UIColor.black
         self.view.addSubview(backImageView)
         initViewsFrame()
@@ -77,11 +77,11 @@ public class EWPhotoCropViewController: UIViewController {
         drawBottomButtonView()
         addGestureRecognizers()
     }
-    private func drawMyNavigationBar(){
+    private func drawMyNavigationBar() {
         let button = UIBarButtonItem(image: EWBundle.imageFromBundle("image_back"), style: .plain, target: self, action: #selector(onClickCancelbuton))
         self.navigationItem.leftBarButtonItem = button
     }
-    private func initViewsFrame(){
+    private func initViewsFrame() {
         /// 裁切区域Width
         let cropWidth = UIScreen.main.bounds.width
         /// 获取选中图片width等于裁切区域时的height
@@ -90,7 +90,7 @@ public class EWPhotoCropViewController: UIViewController {
         if photoOldHeight > ScreenInfo.Height {
             // 大于屏幕尺寸,则正常展示
             self.backImageView.frame = CGRect(x: 0, y: 0, width: cropWidth, height: photoOldHeight)
-        }else{
+        } else {
             // 小于屏幕尺寸,将其置于中心展示
             self.backImageView.frame = CGRect(x: 0, y: (ScreenInfo.Height - photoOldHeight) / 2 , width: cropWidth, height: photoOldHeight)
         }
@@ -104,7 +104,7 @@ public class EWPhotoCropViewController: UIViewController {
         cropFrame = self.cropView.frame
     }
     /// 添加下方取消与完成按钮
-    private func drawBottomButtonView(){
+    private func drawBottomButtonView() {
         let centerView = UIView(frame:CGRect(x: 100, y: self.view.frame.size.height - 50.0, width: self.view.frame.size.width-200, height: 50))
         centerView.backgroundColor = UIColor.black
         centerView.alpha = 0.5
@@ -163,11 +163,11 @@ public class EWPhotoCropViewController: UIViewController {
     }
     /// 缩放手势方法
     @objc private func pinchView(_ pinchGestureRecognizer:UIPinchGestureRecognizer) {
-        if pinchGestureRecognizer.state == .began || pinchGestureRecognizer.state == .changed{
+        if pinchGestureRecognizer.state == .began || pinchGestureRecognizer.state == .changed {
             /// 当缩放手势开始,以及正在进行中时,根据手势缩放比例对应将展示照片的backImageView通过transform进行等比例缩放
             self.backImageView.transform = backImageView.transform.scaledBy(x: pinchGestureRecognizer.scale, y: pinchGestureRecognizer.scale)
             pinchGestureRecognizer.scale = 1
-        }else if pinchGestureRecognizer.state == .ended{
+        } else if pinchGestureRecognizer.state == .ended {
             /// 获取手势结束后backImageView.frame,并通过验证方法对其修正
             var newFrame = self.backImageView.frame
             /// 修正比例
@@ -184,7 +184,7 @@ public class EWPhotoCropViewController: UIViewController {
     //拖拽手势方法
     @objc private func panView(_ panGestureRecognizer:UIPanGestureRecognizer) {
         let view = self.backImageView
-        if panGestureRecognizer.state == .began || panGestureRecognizer.state == .changed{
+        if panGestureRecognizer.state == .began || panGestureRecognizer.state == .changed {
             /// 当拖拽手势开始以及正在进行中时,根据拖拽位移以及图片比例,通过修改view.center实现拖拽效果
             let absCenterX = self.cropFrame!.origin.x + self.cropFrame!.size.width / 2
             let absCenterY = self.cropFrame!.origin.y + self.cropFrame!.size.height / 2
@@ -194,7 +194,7 @@ public class EWPhotoCropViewController: UIViewController {
             let translation = panGestureRecognizer.translation(in: view.superview)
             view.center = CGPoint(x:view.center.x + translation.x * acceleratorX, y: view.center.y + translation.y * acceleratorY)
             panGestureRecognizer.setTranslation(CGPoint.zero, in: view.superview)
-        }else if panGestureRecognizer.state == .ended{
+        } else if panGestureRecognizer.state == .ended {
             /// 获取手势结束后backImageView.frame,并通过验证方法对其修正
             var newFrame = self.backImageView.frame
             /// 修正位置
@@ -207,12 +207,12 @@ public class EWPhotoCropViewController: UIViewController {
         }
     }
     /// 点击取消按钮
-    @objc private func onClickCancelbuton(){
+    @objc private func onClickCancelbuton() {
         self.navigationController?.popViewController(animated: true)
     }
     /// 点击完成按钮
-    @objc private func onClickConfirmButton(){
-        if delegate != nil{
+    @objc private func onClickConfirmButton() {
+        if delegate != nil {
             if self.delegate!.responds(to: #selector(EWImageCropperDelegate.imageCropper(_:didFinished:))) {
                 self.delegate!.imageCropper(self, didFinished: self.getSubImage())
             }
@@ -231,15 +231,15 @@ public class EWPhotoCropViewController: UIViewController {
         if self.latestFrame!.size.width < self.cropFrame!.size.width {
             let newW = self.selectedPhoto.size.width
             let newH = newW * (self.cropFrame!.size.height / self.cropFrame!.size.width)
-            x = 0;
-            y = y + (h - newH) / 2
+            x = 0
+            y += (h - newH) / 2
             w = newH
             h = newH
         }
         if self.latestFrame!.size.height < self.cropFrame!.size.height {
             let newH = self.selectedPhoto.size.height
             let newW = newH * (self.cropFrame!.size.width / self.cropFrame!.size.height)
-            x = x + (w - newW) / 2
+            x += (w - newW) / 2
             y = 0
             w = newH
             h = newH
@@ -337,5 +337,4 @@ public class EWPhotoCropViewController: UIViewController {
         ctx.closePath()
         return img
     }
-
 }

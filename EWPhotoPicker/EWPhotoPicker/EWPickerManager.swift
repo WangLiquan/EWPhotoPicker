@@ -37,7 +37,7 @@ class EWPickerManager: NSObject {
     /// 获取手机相册内所有照片
     ///
     /// - Returns: 手机相册内所有照片
-    public func getAllPhoto() -> [UIImage]{
+    public func getAllPhoto() -> [UIImage] {
         var imageArray = [UIImage]()
         let scale = UIScreen.main.scale
         /// 重要,不对size进行重置会使显示效果变差
@@ -45,8 +45,8 @@ class EWPickerManager: NSObject {
         /// 将图片添加到数组
         for i in 0 ..< self.photoAlbum.count {
             /// 按顺序获取图片
-            self.photoManage.requestImage(for: self.photoAlbum[i], targetSize: photoScaleSize, contentMode: .aspectFill, options: self.photoOption) { (image, infoDic) in
-                if image != nil{
+            self.photoManage.requestImage(for: self.photoAlbum[i], targetSize: photoScaleSize, contentMode: .aspectFill, options: self.photoOption) { (image, _) in
+                if image != nil {
                     imageArray.append(image!)
                 }
             }
@@ -59,12 +59,12 @@ class EWPickerManager: NSObject {
     ///   - index: 照片处在array的index
     ///   - resultHandler: 将获取data回调
     public func getPhotoData(index: Int, resultHandler: ((Data?, UIImage.Orientation) -> Void)?) {
-        self.photoManage.requestImageData(for: self.photoAlbum[index], options: nil, resultHandler: { (data, str, orientation, hashable) in
+        self.photoManage.requestImageData(for: self.photoAlbum[index], options: nil, resultHandler: { (data, _, orientation, _) in
             resultHandler?(data, orientation)
         })
     }
     /// 获取手机中所有相册照片源
-    private func getPhotoAlbums(){
+    private func getPhotoAlbums() {
         //创建一个PHFetchOptions对象检索照片
         let options = PHFetchOptions()
         //通过创建时间来检索

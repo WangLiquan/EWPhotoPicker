@@ -30,7 +30,7 @@ class ViewController: UIViewController {
         self.view.addSubview(button)
     }
 
-    @objc private func onClickPhotoButton(){
+    @objc private func onClickPhotoButton() {
         let nnvc = EWPhotoPickerViewController(photoDelegate: self)
         /// 可以传入navigationBar.tintColor以保证与项目相同展示效果.默认不传为UIColor.black
 //        let PPVC = EWPhotoPickerViewController(photoDelegate: self, tintColor: UIColor.gray)
@@ -43,10 +43,9 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: EWImageCropperDelegate{
+extension ViewController: EWImageCropperDelegate {
     func imageCropper(_ cropperViewController: EWPhotoCropViewController, didFinished editImg: UIImage) {
         cropperViewController.navigationController?.dismiss(animated: true, completion: nil)
         self.imageView.image = editImg
     }
 }
-

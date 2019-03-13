@@ -27,7 +27,7 @@ public class EWPhotoCollectionViewCell: UICollectionViewCell {
         self.addSubview(imageView)
         imageView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height)
     }
-    public func setData(image: UIImage = EWBundle.imageFromBundle("image_camera")!){
+    public func setData(image: UIImage = EWBundle.imageFromBundle("image_camera")!) {
        self.imageView.image = image
     }
 }

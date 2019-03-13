@@ -19,12 +19,12 @@ struct ScreenInfo {
         return UIScreen.main.bounds.equalTo(CGRect(x: 0, y: 0, width: 375, height: 812))
     }
     static private func navBarHeight() -> CGFloat {
-        return isIphoneX() ? 88 : 64;
+        return isIphoneX() ? 88 : 64
     }
 }
 /// 获取图片
 public struct EWBundle {
-    
+    /// 根据budle获取image
     static public func imageFromBundle(_ imageName: String) -> UIImage? {
         var bundle = Bundle(for: EWPickerManager.self)
         if let resourcePath = bundle.path(forResource: "EWPhotoPicker", ofType: "bundle") {
@@ -32,10 +32,9 @@ public struct EWBundle {
                 bundle = resourcesBundle
             }
         }
-        if let image = UIImage(named: imageName, in: bundle, compatibleWith: nil){
+        if let image = UIImage(named: imageName, in: bundle, compatibleWith: nil) {
             return image
         }
         return nil
     }
 }
-
