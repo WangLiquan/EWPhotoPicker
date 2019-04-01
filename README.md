@@ -1,5 +1,7 @@
 # EWPhotoPicker
-<h3>自定制相册,实现相册列表首个cell是相机按钮功能</h3>
+[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
+
+自定制相册,实现相册列表首个cell是相机按钮功能
 
 # 实现思路:
 
