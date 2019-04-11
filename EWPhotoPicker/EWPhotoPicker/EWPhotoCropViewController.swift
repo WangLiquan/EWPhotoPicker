@@ -296,8 +296,10 @@ public class EWPhotoCropViewController: UIViewController {
         }
         return newFrame
     }
+}
+extension EWPhotoCropViewController {
     // 保证图片方向
-    func fixOrientation(_ srcImg:UIImage) -> UIImage {
+    private func fixOrientation(_ srcImg:UIImage) -> UIImage {
         if srcImg.imageOrientation == UIImage.Orientation.up {
             return srcImg
         }
@@ -313,6 +315,8 @@ public class EWPhotoCropViewController: UIViewController {
             transform = transform.translatedBy(x: 0, y: srcImg.size.height)
             transform = transform.rotated(by: -.pi/2)
         case UIImage.Orientation.up, UIImage.Orientation.upMirrored: break
+        @unknown default:
+            break
         }
         switch srcImg.imageOrientation {
         case UIImage.Orientation.upMirrored, UIImage.Orientation.downMirrored:
@@ -322,6 +326,8 @@ public class EWPhotoCropViewController: UIViewController {
             transform = transform.translatedBy(x: srcImg.size.height, y: 0)
             transform = transform.scaledBy(x: -1, y: 1)
         case UIImage.Orientation.up, UIImage.Orientation.down, UIImage.Orientation.left, UIImage.Orientation.right:break
+        @unknown default:
+            break
         }
         // 上下文
         let ctx:CGContext = CGContext(data: nil, width: Int(srcImg.size.width), height: Int(srcImg.size.height), bitsPerComponent: srcImg.cgImage!.bitsPerComponent, bytesPerRow: 0, space: srcImg.cgImage!.colorSpace!, bitmapInfo: srcImg.cgImage!.bitmapInfo.rawValue)!
